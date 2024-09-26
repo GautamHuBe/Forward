@@ -1,6 +1,6 @@
 import asyncio
-import logging 
-import logging.config
+import logger 
+import logger.config
 from database import db 
 from config import Config, temp
 from pyrogram import Client, __version__
@@ -24,13 +24,13 @@ class Bot(Client):
     async def start(self):
         await super().start()
         me = await self.get_me()
-        logging.info(f"{me.first_name} with for pyrogram v{__version__} (Layer {layer}) started on @{me.username}.")
+        logger.info(f"{me.first_name} with for pyrogram v{__version__} (Layer {layer}) started on @{me.username}.")
         temp.ID = me.id
         temp.UNAME = me.username
         temp.NAME = me.first_name
         self.set_parse_mode(ParseMode.DEFAULT)
         text = "**๏[-ิ_•ิ]๏ bot restarted !**"
-        logging.info(text)
+        logger.info(text)
         success = failed = 0
         users = await db.get_all_frwd()
         async for user in users:
@@ -47,12 +47,12 @@ class Bot(Client):
     #    await self.send_message("venombotsupport", text)
         if (success + failed) != 0:
            await db.rmve_frwd(all=True)
-           logging.info(f"Restart message status"
+           logger.info(f"Restart message status"
                  f"success: {success}"
                  f"failed: {failed}")
 
     async def stop(self, *args):
         msg = f"@{temp.UNAME} stopped. Bye."
         await super().stop()
-        logging.info(msg)
+        logger.info(msg)
    
