@@ -187,8 +187,8 @@ class CLIENT:
           try:
              two_step_msg = await bot.ask(user_id, "Please enter your two-step verification password to continue.", filters=filters.text, timeout=300)
              if two_step_msg.text and two_step_msg.text.startswith('/'):
-             await bot.send_message(user_id, "<b>Process cancelled!</b>")
-             return
+                await bot.send_message(user_id, "<b>Process cancelled!</b>")
+                return
           except TimeoutError:
               await bot.send_message(user_id, "Time limit reached of 5 minutes.\n\nPlease start generating your session again.")
               return
