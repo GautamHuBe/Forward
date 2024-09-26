@@ -27,7 +27,7 @@ main_buttons = [[
 @Client.on_message(filters.private & filters.command(['start']))
 async def start(client, message):
     user = message.from_user
-    text, buttons = await handle_force_sub(c, m)
+    text, buttons = await handle_force_sub(client, message)
     if buttons:
        return await srm(client, message, text, delete=0, photo='https://envs.sh/s/0jAf2Ta5kVg5AdnqZj-vIQ/Snp.png', markup=buttons)
             
