@@ -1,9 +1,79 @@
-
+import asyncio
+from config import Config
+from pyrogram.errors import UserNotParticipant
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from plugins import logger
+     
 import time as tm
 from database import db 
 from .test import parse_buttons
 
 STATUS = {}
+
+async def handle_force_sub(client, message):
+ try:
+    uid = message.from_user.id
+    buttons = []
+    if Config.FSUB_CHANNELS:
+       for channel in Config.FSUB_CHANNELS:
+           chat = await client.get_chat(channel)
+           text = "**🔒 Join The Channels Below To Use Me 🔒**\n"
+           try:
+               await client.get_chat_member(chat_id=channel, user_id=uid)
+           except UserNotParticipant:
+               invite_link = await client.export_chat_invite_link(chat_id=channel)
+               buttons.append([InlineKeyboardButton(f"Join {chat.title}", url=invite_link)])
+       return text, buttons
+ except Exception as e:
+     logger.error('fsub', exc_info=True)
+     return await srm(client, message, f"Got An Error - {str(e)}")
+
+async def srm(c, m, text, photo=None, video=None, markup=None, reply_id=None, delete=20, iscall=False, **kwargs):
+ try:
+   replymarkup = None if markup is None else InlineKeyboardMarkup(markup)
+   mid = m.message.id if iscall else m.id
+   replyid = mid if reply_id is None else reply_id
+   tosend = m.message.chat.id if iscall else m.chat.id
+   if photo:
+      my = await c.send_photo(
+          chat_id=tosend,
+          photo=photo,
+          caption=text,
+          reply_to_message_id=mid,
+          reply_markup=replymarkup,
+          **kwargs
+      )
+   elif video:
+       pass
+       
+   else:
+      my = await c.send_message(
+          chat_id=tosend,
+          text=text,
+          reply_to_message_id=mid,
+          reply_markup=replymarkup,
+          **kwargs
+      )
+   if delete:
+      await delete_msg([my, m], dt=delete)
+ except:
+   LOGGER.error('srm', exc_info=True)
+     
+async def delete_msg(msg_list: list, dt=10):
+    async def _delete_messages():
+        try:
+            await asyncio.sleep(dt)
+            for msg in msg_list:
+                if msg:
+                    try:
+                        await msg.delete()
+                        LOGGER.info("Message Deleted Succefully...")
+                    except Exception as e:
+                        pass 
+        except Exception as e:
+            pass
+    asyncio.create_task(_delete_messages())
+    
 
 class STS:
     def __init__(self, id):
