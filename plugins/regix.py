@@ -50,7 +50,8 @@ async def pub_(bot, message):
     try:
        k = await client.send_message(i.TO, "Testing")
        await k.delete()
-    except:
+    except Exception as e:
+       logger.error('H', exc_info=True)
        await msg_edit(m, f"**Please Make Your [UserBot / Bot](t.me/{_bot['username']}) Admin In Target Channel With Full Permissions**", retry_btn(frwd_id), True)
        return await stop(client, user)
     temp.forwardings += 1
