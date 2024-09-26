@@ -6,11 +6,9 @@ from config import Config, temp
 from pyrogram import Client, __version__
 from pyrogram.raw.all import layer 
 from pyrogram.enums import ParseMode
-from pyrogram.errors import FloodWait 
+from pyrogram.errors import FloodWait
+from plugins import logger
 
-logging.config.fileConfig('logging.conf')
-logging.getLogger().setLevel(logging.INFO)
-logging.getLogger("pyrogram").setLevel(logging.ERROR)
 
 class Bot(Client): 
     def __init__(self):
@@ -19,21 +17,17 @@ class Bot(Client):
             api_hash=Config.API_HASH,
             api_id=Config.API_ID,
             bot_token=Config.BOT_TOKEN,
-            plugins={
-                "root": "plugins"
-            },
-            workers=50,
-            
+            plugins={"root": "plugins"},
+            workers=100,
         )
-        self.log = logging
-
+        
     async def start(self):
         await super().start()
         me = await self.get_me()
         logging.info(f"{me.first_name} with for pyrogram v{__version__} (Layer {layer}) started on @{me.username}.")
-        self.id = me.id
-        self.username = me.username
-        self.first_name = me.first_name
+        temp.ID = me.id
+        temp.UNAME = me.username
+        temp.NAME = me.first_name
         self.set_parse_mode(ParseMode.DEFAULT)
         text = "**๏[-ิ_•ิ]๏ bot restarted !**"
         logging.info(text)
@@ -58,7 +52,7 @@ class Bot(Client):
                  f"failed: {failed}")
 
     async def stop(self, *args):
-        msg = f"@{self.username} stopped. Bye."
+        msg = f"@{temp.UNAME} stopped. Bye."
         await super().stop()
         logging.info(msg)
    # bot developer @mr_jisshu
