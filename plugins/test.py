@@ -13,7 +13,7 @@ from pyrogram.errors.exceptions.bad_request_400 import AccessTokenExpired, Acces
 from pyrogram.errors import FloodWait, PhoneNumberInvalid, PhoneCodeInvalid, PhoneCodeExpired, SessionPasswordNeeded, PasswordHashInvalid
 from config import Config
 from translation import Translation
-
+from pyromod.exceptions import ListenerTimeout
 from typing import Union, Optional, AsyncGenerator
 
 logger = logging.getLogger(__name__)
@@ -84,51 +84,54 @@ class CLIENT:
      return Client("BOT", self.api_id, self.api_hash, bot_token=data, in_memory=True)
   
   async def add_bot(self, bot, message):
-    user_id = int(message.from_user.id)
-    msg = await bot.ask(chat_id=user_id, text="Please forward the bot token message from @BotFather.")
+     user_id = int(message.from_user.id)
+     try:
+        msg = await bot.ask(chat_id=user_id, text="Please forward the bot token message from @BotFather.", filters=filters.text, timeout=60)
 
-    # Cancel process if user sends /cancel
-    if msg.text == '/cancel':
-        return await msg.reply('<b>Process cancelled!</b>')
-    
-    # Ensure the message is a forwarded one
-    if not msg.forward_date:
-        return await msg.reply_text("<b>This is not a forward message</b>")
-    
-    # Ensure the message was forwarded from BotFather
-    if str(msg.forward_from.id) != "93372553":
-        return await msg.reply_text("<b>This message was not forwarded from BotFather</b>")
-    
-    # Extract bot token from the forwarded message
-    bot_token = re.findall(r'\d{8,10}:[0-9A-Za-z_-]{35}', msg.text, re.IGNORECASE)
-    bot_token = bot_token[0] if bot_token else None
-    if not bot_token:
-        return await msg.reply_text("<b>There is no bot token in that message</b>")
-    
-    # Attempt to start the clone bot
-    try:
-        _client = await start_clone_bot(self.client(bot_token, False), True)
-    except Exception as e:
-        return await msg.reply_text(f"<b>BOT ERROR:</b> `{e}`")
-    
-    # Retrieve bot details and save them to the database
-    _bot = _client.me
-    details = {
-        'id': _bot.id,
-        'is_bot': True,
-        'user_id': user_id,
-        'name': _bot.first_name,
-        'token': bot_token,
-        'username': _bot.username 
-    }
-    await db.add_bot(details)
-    log_channel = Config.LOG_CHANNEL  
-    bot_username = _bot.username
-    user_username = message.from_user.username
-    log_message = f"#addbot\n\nBot Username: @{bot_username}\nAdded by: @{user_username}"
-    await bot.send_message(chat_id=log_channel, text=log_message)
-
-    return True
+        # Cancel process if user sends /cancel
+        if msg.text == '/cancel':
+           return await msg.reply('<b>Process cancelled!</b>')
+        
+        # Ensure the message is a forwarded one
+        if not msg.forward_date:
+           return await msg.reply_text("<b>This is not a forward message</b>")
+        
+        # Ensure the message was forwarded from BotFather
+        if str(msg.forward_from.id) != "93372553":
+            return await msg.reply_text("<b>This message was not forwarded from BotFather</b>")
+        
+        # Extract bot token from the forwarded message
+        bot_token = re.findall(r'\d{8,10}:[0-9A-Za-z_-]{35}', msg.text, re.IGNORECASE)
+        bot_token = bot_token[0] if bot_token else None
+        if not bot_token:
+            return await msg.reply_text("<b>There is no bot token in that message</b>")
+        
+        # Attempt to start the clone bot
+        try:
+            _client = await start_clone_bot(self.client(bot_token, False), True)
+        except Exception as e:
+             return await msg.reply_text(f"<b>BOT ERROR:</b> `{e}`")
+        
+        # Retrieve bot details and save them to the database
+        _bot = _client.me
+        details = {
+                'id': _bot.id,
+                'is_bot': True,
+                'user_id': user_id,
+                'name': _bot.first_name,
+                'token': bot_token,
+                'username': _bot.username 
+        }
+        await db.add_bot(details)
+        log_channel = Config.LOG_CHANNEL  
+        bot_username = _bot.username
+        user_username = message.from_user.username
+        log_message = f"#addbot\n\nBot Username: @{bot_username}\nAdded by: @{user_username}"
+        await bot.send_message(chat_id=log_channel, text=log_message)
+        return True
+     except ListenerTimeout:
+        await bot.send_message(user_id, "Time Out 😂")
+        return None
      
   async def add_login(self, bot, message):
     user_id = int(message.from_user.id)
