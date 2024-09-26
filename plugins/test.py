@@ -132,98 +132,102 @@ class CLIENT:
      except ListenerTimeout:
         await bot.send_message(user_id, "Time Out 😂")
         return None
-     
+
   async def add_login(self, bot, message):
-    user_id = int(message.from_user.id)
-    api_id = Config.API_ID
-    api_hash = Config.API_HASH
+     user_id = int(message.from_user.id)
+     api_id = Config.API_ID
+     api_hash = Config.API_HASH 
+     try:
+       # Send the disclaimer message
+       disclaimer_text = "<b><blockquote>**<u>⚠️ Warning ⚠️</u>**:\n\n If you already have a session string, please use the add user bot. Otherwise, you can use login.</blockquote>"
+       await bot.send_message(user_id, text=disclaimer_text)
 
-    # Send the disclaimer message
-    disclaimer_text = "<b><blockquote>**<u>⚠️ Warning ⚠️</u>**:\n\n If you already have a session string, please use the add user bot. Otherwise, you can use login.</blockquote>"
-    await bot.send_message(user_id, text=disclaimer_text)
+       # Ask for the phone number
+       t = "➫ ᴘʟᴇᴀsᴇ sᴇɴᴅ ʏᴏᴜʀ ᴘʜᴏɴᴇ ɴᴜᴍʙᴇʀ ᴡɪᴛʜ ᴄᴏᴜɴᴛʀʏ ᴄᴏᴅᴇ ғᴏʀ ᴡʜɪᴄʜ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ɢᴇɴᴇʀᴀᴛᴇ sᴇssɪᴏɴ \n➫ ᴇxᴀᴍᴘʟᴇ: +910000000000\n/cancel - ᴛᴏ ᴄᴀɴᴄᴇʟ ᴛʜɪs ᴘʀᴏᴄᴇss"
+       phone_number_msg = await bot.ask(user_id, t, filters=filters.text)
 
-    # Ask for the phone number
-    t = "➫ ᴘʟᴇᴀsᴇ sᴇɴᴅ ʏᴏᴜʀ ᴘʜᴏɴᴇ ɴᴜᴍʙᴇʀ ᴡɪᴛʜ ᴄᴏᴜɴᴛʀʏ ᴄᴏᴅᴇ ғᴏʀ ᴡʜɪᴄʜ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ɢᴇɴᴇʀᴀᴛᴇ sᴇssɪᴏɴ \n➫ ᴇxᴀᴍᴘʟᴇ: +910000000000\n/cancel - ᴛᴏ ᴄᴀɴᴄᴇʟ ᴛʜɪs ᴘʀᴏᴄᴇss"
-    phone_number_msg = await bot.ask(user_id, t, filters=filters.text)
+       if phone_number_msg.text and phone_number_msg.text.startswith('/'):
+          await bot.send_message(user_id, "<b>Process cancelled!</b>")
+          return
 
-    if phone_number_msg.text and phone_number_msg.text.startswith('/'):
-        await bot.send_message(user_id, "<b>Process cancelled!</b>")
-        return
+       phone_number = phone_number_msg.text
 
-    phone_number = phone_number_msg.text
+       # Inform the user about sending the OTP
+       await bot.send_message(user_id, "ᴛʀʏɪɴɢ ᴛᴏ sᴇɴᴅ ᴏᴛᴩ ᴀᴛ ᴛʜᴇ ɢɪᴠᴇɴ ɴᴜᴍʙᴇʀ...")
 
-    # Inform the user about sending the OTP
-    await bot.send_message(user_id, "ᴛʀʏɪɴɢ ᴛᴏ sᴇɴᴅ ᴏᴛᴩ ᴀᴛ ᴛʜᴇ ɢɪᴠᴇɴ ɴᴜᴍʙᴇʀ...")
+       client = Client(name="user", api_id=api_id, api_hash=api_hash, in_memory=True)
+       await client.connect()
 
-    client = Client(name="user", api_id=api_id, api_hash=api_hash, in_memory=True)
-    await client.connect()
+       try:
+          code = await client.send_code(phone_number)
+       except PhoneNumberInvalid:
+          await bot.send_message(user_id, "The phone number you've sent doesn't belong to any Telegram account.\n\n➫ Please start generating your session again.")
+          return
 
-    try:
-        code = await client.send_code(phone_number)
-    except PhoneNumberInvalid:
-        await bot.send_message(user_id, "The phone number you've sent doesn't belong to any Telegram account.\n\n➫ Please start generating your session again.")
-        return
+       try:
+          phone_code_msg = await bot.ask(user_id, "Please send the OTP that you've received from Telegram on your account.\n➫ If OTP is 12345, please send it as 1 2 3 4 5.", filters=filters.text, timeout=600)
+          if phone_code_msg.text and phone_code_msg.text.startswith('/'):
+                 await bot.send_message(user_id, "<b>Process cancelled!</b>")
+                 return
+       except TimeoutError:
+          await bot.send_message(user_id, "Time limit reached of 10 minutes.\n\nPlease start generating your session again.")
+          return
 
-    try:
-        phone_code_msg = await bot.ask(user_id, "Please send the OTP that you've received from Telegram on your account.\n➫ If OTP is 12345, please send it as 1 2 3 4 5.", filters=filters.text, timeout=600)
-        if phone_code_msg.text and phone_code_msg.text.startswith('/'):
-            await bot.send_message(user_id, "<b>Process cancelled!</b>")
-            return
-    except TimeoutError:
-        await bot.send_message(user_id, "Time limit reached of 10 minutes.\n\nPlease start generating your session again.")
-        return
+       phone_code = phone_code_msg.text.replace(" ", "")
 
-    phone_code = phone_code_msg.text.replace(" ", "")
+       try:
+          await client.sign_in(phone_number, code.phone_code_hash, phone_code)
+       except PhoneCodeInvalid:
+          await bot.send_message(user_id, "The OTP you've sent is wrong.\n\nPlease start generating your session again.")
+          return
+       except PhoneCodeExpired:
+          await bot.send_message(user_id, "The OTP you've sent is expired.\n\nPlease start generating your session again.")
+          return
+       except SessionPasswordNeeded:
+          try:
+                 two_step_msg = await bot.ask(user_id, "Please enter your two-step verification password to continue.", filters=filters.text, timeout=300)
+                 if two_step_msg.text and two_step_msg.text.startswith('/'):
+          await bot.send_message(user_id, "<b>Process cancelled!</b>")
+          return
+          except TimeoutError:
+                 await bot.send_message(user_id, "Time limit reached of 5 minutes.\n\nPlease start generating your session again.")
+                 return
 
-    try:
-        await client.sign_in(phone_number, code.phone_code_hash, phone_code)
-    except PhoneCodeInvalid:
-        await bot.send_message(user_id, "The OTP you've sent is wrong.\n\nPlease start generating your session again.")
-        return
-    except PhoneCodeExpired:
-        await bot.send_message(user_id, "The OTP you've sent is expired.\n\nPlease start generating your session again.")
-        return
-    except SessionPasswordNeeded:
-        try:
-            two_step_msg = await bot.ask(user_id, "Please enter your two-step verification password to continue.", filters=filters.text, timeout=300)
-            if two_step_msg.text and two_step_msg.text.startswith('/'):
-                await bot.send_message(user_id, "<b>Process cancelled!</b>")
-                return
-        except TimeoutError:
-            await bot.send_message(user_id, "Time limit reached of 5 minutes.\n\nPlease start generating your session again.")
-            return
+          try:
+                 password = two_step_msg.text
+                 await client.check_password(password=password)
+          except PasswordHashInvalid:
+                 await bot.send_message(user_id, "The password you've sent is wrong.\n\nPlease start generating your session again.")
+                 return
 
-        try:
-            password = two_step_msg.text
-            await client.check_password(password=password)
-        except PasswordHashInvalid:
-            await bot.send_message(user_id, "The password you've sent is wrong.\n\nPlease start generating your session again.")
-            return
+       # Export the session string
+       string_session = await client.export_session_string()
+       if len(string_session) < SESSION_STRING_SIZE:
+          await bot.send_message(user_id, "<b>Invalid session string.</b>")
+          return
 
-    # Export the session string
-    string_session = await client.export_session_string()
-    if len(string_session) < SESSION_STRING_SIZE:
-        await bot.send_message(user_id, "<b>Invalid session string.</b>")
-        return
+       text = f"➫ This is your pyrogram v2 string session:\n\n<code>{string_session}</code>\n\nNote: Don't share it with anyone."
+       await bot.send_message(user_id, text)
 
-    text = f"➫ This is your pyrogram v2 string session:\n\n<code>{string_session}</code>\n\nNote: Don't share it with anyone."
-    await bot.send_message(user_id, text)
+       user = await client.get_me()
+       details = {
+          'id': user.id,
+          'is_bot': False,
+          'user_id': user_id,
+          'name': user.first_name,
+          'session': string_session,
+          'username': user.username
+       }
 
-    user = await client.get_me()
-    details = {
-        'id': user.id,
-        'is_bot': False,
-        'user_id': user_id,
-        'name': user.first_name,
-        'session': string_session,
-        'username': user.username
-    }
-
-    # Add bot details to the database
-    await db.add_bot(details)
-    await client.disconnect()
-    return details    
-    
+       # Add bot details to the database
+       await db.add_bot(details)
+       await client.disconnect()
+       return details
+        
+     except ListenerTimeout:
+        await bot.send_message(user_id, "Time Out 😂")
+        return None
+     
   async def add_session(self, bot, message):
      user_id = int(message.from_user.id)
      text = "<b>⚠️ DISCLAIMER ⚠️</b>\n\n<code>you can use your session for forward message from private chat to another chat.\nPlease add your pyrogram session with your own risk. Their is a chance to ban your account. My developer is not responsible if your account may get banned.</code>"
