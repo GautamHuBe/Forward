@@ -4,6 +4,7 @@ TgCrypto
 Dnspython
 datetime
 pytz
+pyromod 
 
 #----app.py----#
 Flask==1.1.2
