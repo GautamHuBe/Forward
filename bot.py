@@ -1,6 +1,4 @@
 import asyncio
-import logger 
-import logger.config
 from database import db 
 from config import Config, temp
 from pyrogram import Client, __version__
