@@ -134,10 +134,10 @@ class CLIENT:
         return None
 
   async def add_login(self, bot, message):
-     user_id = int(message.from_user.id)
-     api_id = Config.API_ID
-     api_hash = Config.API_HASH 
-     try:
+    user_id = int(message.from_user.id)
+    api_id = Config.API_ID
+    api_hash = Config.API_HASH 
+    try:
        # Send the disclaimer message
        disclaimer_text = "<b><blockquote>**<u>⚠️ Warning ⚠️</u>**:\n\n If you already have a session string, please use the add user bot. Otherwise, you can use login.</blockquote>"
        await bot.send_message(user_id, text=disclaimer_text)
@@ -185,20 +185,19 @@ class CLIENT:
           return
        except SessionPasswordNeeded:
           try:
-                 two_step_msg = await bot.ask(user_id, "Please enter your two-step verification password to continue.", filters=filters.text, timeout=300)
-                 if two_step_msg.text and two_step_msg.text.startswith('/'):
-          await bot.send_message(user_id, "<b>Process cancelled!</b>")
-          return
+             two_step_msg = await bot.ask(user_id, "Please enter your two-step verification password to continue.", filters=filters.text, timeout=300)
+             if two_step_msg.text and two_step_msg.text.startswith('/'):
+             await bot.send_message(user_id, "<b>Process cancelled!</b>")
+             return
           except TimeoutError:
-                 await bot.send_message(user_id, "Time limit reached of 5 minutes.\n\nPlease start generating your session again.")
-                 return
-
+              await bot.send_message(user_id, "Time limit reached of 5 minutes.\n\nPlease start generating your session again.")
+              return
           try:
-                 password = two_step_msg.text
-                 await client.check_password(password=password)
+             password = two_step_msg.text
+             await client.check_password(password=password)
           except PasswordHashInvalid:
-                 await bot.send_message(user_id, "The password you've sent is wrong.\n\nPlease start generating your session again.")
-                 return
+             await bot.send_message(user_id, "The password you've sent is wrong.\n\nPlease start generating your session again.")
+             return
 
        # Export the session string
        string_session = await client.export_session_string()
@@ -224,7 +223,7 @@ class CLIENT:
        await client.disconnect()
        return details
         
-     except ListenerTimeout:
+    except ListenerTimeout:
         await bot.send_message(user_id, "Time Out 😂")
         return None
      
