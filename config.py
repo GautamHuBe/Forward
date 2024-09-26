@@ -25,6 +25,4 @@ class temp(object):
     forwardings = 0
     BANNED_USERS = []
     IS_FRWD_CHAT = []
-    NAME = None
-    UNAME = None
-    ID = None
+    
