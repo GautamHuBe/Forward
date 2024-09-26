@@ -9,7 +9,7 @@ class Config:
     BOT_OWNER_ID = [int(id) for id in environ.get("BOT_OWNER_ID", '6805001741').split()]
     BOT_SESSION = environ.get("BOT_SESSION", "forward") 
 
-    PICS = (environ.get('PICS', 'https://graph.org/file/e223aea8aca83e99162bb.jpg'))
+    PICS = (environ.get('PICS', 'https://envs.sh/s/0jAf2Ta5kVg5AdnqZj-vIQ/Snp.png'))
     
     DATABASE_URI = environ.get("DATABASE", "mongodb+srv://diliya:diliya@cluster0.umeyupr.mongodb.net/?retryWrites=true&w=majority")
     DATABASE_NAME = environ.get("DATABASE_NAME", "Forward")
