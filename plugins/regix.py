@@ -55,7 +55,7 @@ async def pub_(bot, message):
        return await stop(client, user)
     temp.forwardings += 1
     await db.add_frwd(user)
-    await send(client, user, "<b>🚥 ғᴏʀᴡᴀʀᴅɪɴɢ sᴛᴀʀᴛᴇᴅ via <a href=https://t.me/Jisshu_forward_bot>Forward Bot</a></b>")
+    await send(client, user, f"<b>🚥 ғᴏʀᴡᴀʀᴅɪɴɢ sᴛᴀʀᴛᴇᴅ via <a href=https://t.me/{temp.UNAME}>Forward Bot</a></b>")
     sts.add(time=True)
     sleep = 1 if _bot['is_bot'] else 10
     await msg_edit(m, "<b>Processing...</b>") 
@@ -164,8 +164,6 @@ PROGRESS = """
 ♻️ Stataus: {4}
 
 ⏳️ ETA: {5}
-
-My Developer @Mr_Jisshu
 """
 
 async def msg_edit(msg, text, button=None, wait=None):
@@ -199,8 +197,8 @@ async def edit(msg, title, status, sts):
    text = TEXT.format(i.fetched, i.total_files, i.duplicate, i.deleted, i.skip, status, percentage, estimated_total_time, status)
    if status in ["cancelled", "completed"]:
       button.append(
-         [InlineKeyboardButton('Support', url='https://t.me/Jisshu_support'),
-         InlineKeyboardButton('Updates', url='https://t.me/JISSHU_BOTS')]
+         [InlineKeyboardButton('Support', url='https://t.me/GK_BOTZ'),
+         InlineKeyboardButton('Updates', url='https://t.me/GKBOTZ')]
          )
    else:
       button.append([InlineKeyboardButton('• ᴄᴀɴᴄᴇʟ', 'terminate_frwd')])

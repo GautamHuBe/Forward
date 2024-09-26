@@ -2,7 +2,7 @@ import asyncio
 from database import db
 from translation import Translation
 from pyrogram import Client, filters
-from config import Config
+from config import Config, temp
 from .test import get_configs, update_configs, CLIENT, parse_buttons
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -219,7 +219,7 @@ async def settings_query(bot, query):
      buttons.append([InlineKeyboardButton('↩ Back', 
                       callback_data="settings#main")])
      await query.message.edit_text(
-        "<b><u>🔘CUSTOM BUTTON</b></u>\n\n<b>You can add inline buttons to messages with the following format:</b>\n\n<b>Single Button in a row:</b>\n\n`[Forward bot][buttonurl:https://t.me/Jisshu_forward_bot]`\n\n<b>More than one button in same row:</b>\n\n`[forward bot][buttonurl:https://t.me/Jisshu_forward_bot]\n[forward bot][buttonurl:https://t.me/Jisshu_forward_bot(:same)]`",
+        f""<b><u>🔘CUSTOM BUTTON</b></u>\n\n<b>You can add inline buttons to messages with the following format:</b>\n\n<b>Single Button in a row:</b>\n\n`[Forward bot][buttonurl:https://t.m{temp.UNAME}ot]`\n\n<b>More than one button in same row:</b>\n\n`[forward bot][buttonurl:https://t.m{temp.UNAME}ot]\n[forward bot][buttonurl:https://t.m{temp.UNAME}ot(:same)]`""",
         reply_markup=InlineKeyboardMarkup(buttons))
   
   elif type=="addbutton":
@@ -584,6 +584,6 @@ async def next_filters_buttons(user_id):
        ]]
   return InlineKeyboardMarkup(buttons) 
 
-  # powered by @JISSHU_BOTS
+  
 
   

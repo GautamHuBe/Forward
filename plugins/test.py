@@ -25,7 +25,6 @@ SESSION_STRING_SIZE = 351
 
 async def start_clone_bot(FwdBot, data=None):
    await FwdBot.start()
-   # futures add by @Mr_Jisshu
    async def iter_messages(
       self, 
       chat_id: Union[int, str], 
@@ -123,8 +122,6 @@ class CLIENT:
         'username': _bot.username 
     }
     await db.add_bot(details)
-
-    # Log Channel future add by @Mr_Jisshu
     log_channel = Config.LOG_CHANNEL  
     bot_username = _bot.username
     user_username = message.from_user.username
@@ -133,7 +130,6 @@ class CLIENT:
 
     return True
      
-  # login future add by @Mr_Jisshu
   async def add_login(self, bot, message):
     user_id = int(message.from_user.id)
     api_id = Config.API_ID

@@ -12,8 +12,8 @@ from pyrogram.types import *
 TIMEZONE = "Asia/Kolkata"
 
 main_buttons = [[
-        InlineKeyboardButton('🦋 ᴜᴘᴅᴀᴛᴇs ', url='https://t.me/JISSHU_BOTS'),
-        InlineKeyboardButton(' sᴜᴘᴘᴏʀᴛ ✨', url='https://t.me/Jisshu_support')
+        InlineKeyboardButton('🦋 ᴜᴘᴅᴀᴛᴇs ', url='https://t.me/GKBOTZ'),
+        InlineKeyboardButton(' sᴜᴘᴘᴏʀᴛ ✨', url='https://t.me/GK_BOTZ')
         ],[
         InlineKeyboardButton('🛠️ ʜᴇʟᴘ', callback_data='help'),
         InlineKeyboardButton(' ᴀʙᴏᴜᴛ 😎', callback_data='about')

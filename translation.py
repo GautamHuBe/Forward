@@ -1,5 +1,5 @@
 import os
-from config import Config
+from config import Config, temp
 
 class Translation(object):
   START_TXT = """<b>Hᴇʏ {},{}</b>
@@ -8,7 +8,7 @@ class Translation(object):
 ◈ I Cᴀɴ Fᴏʀᴡᴀʀᴅ Aʟʟ Mᴇꜱꜱᴀɢᴇ Fʀᴏᴍ Oɴᴇ Cʜᴀɴɴᴇʟ Tᴏ Aɴᴏᴛʜᴇʀ Cʜᴀɴɴᴇʟ.
 ◈ Cʟɪᴄᴋ Hᴇʟᴘ Bᴜᴛᴛᴏɴ Tᴏ Kɴᴏᴡ Mᴏʀᴇ Aʙᴏᴜᴛ Mᴇ.
 
-<blockquote>ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ: <a href='https://t.me/JISSHU_BOTS'>Jɪssʜᴜ ʙᴏᴛs</a></blockquote></b>"""
+<blockquote>ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ: <a href='https://t.me/GKBOTZ'>GK Bᴏᴛᴢ</a></blockquote></b>"""
 
 
   HELP_TXT = """<b><u>🛠️ HELP</b></u>
@@ -39,16 +39,15 @@ class Translation(object):
 ► __if the **From Channel** is private your userbot must be member in there or your bot must need admin permission in there also__
 ► __Then use /forward to forward messages__</b>"""
   
-  ABOUT_TXT = """<b>
+  ABOUT_TXT = f"""<b>
 ╭───────────⍟
-├◈ ᴍy ɴᴀᴍᴇ : <a href=https://t.me/Jisshu_forward_bot>Auto Forward Bot</a>
-├◈ Dᴇᴠᴇʟᴏᴩᴇʀꜱ : <a href=https://t.me/MR_JISSHU>Mr.Jisshu</a> 
-├◈ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ: <a href=https://t.me/JISSHU_BOTS>JISSHU BOTS </a>   
+├◈ ᴍy ɴᴀᴍᴇ : <a href=https://t.me/{temp.UNAME}>Auto Forward Bot</a>
+├◈ Dᴇᴠᴇʟᴏᴩᴇʀꜱ : <a href=https://t.me/Talk2Smile_Bot>Mʀ. Sᴍɪʟᴇ</a> 
+├◈ Uᴘᴅᴀᴛᴇs Cʜᴀɴɴᴇʟ: <a href=https://t.me/GKBOTZ>GK Bᴏᴛᴢ </a>   
 ├◈ Lɪʙʀᴀʀy : <a href=https://github.com/pyrogram>Pyʀᴏɢʀᴀᴍ</a>
 ├◈ Lᴀɴɢᴜᴀɢᴇ: <a href=https://www.python.org/>Pʏᴛʜᴏɴ 𝟹</a>
 ├◈ Dᴀᴛᴀ Bᴀꜱᴇ: <a href=https://cloud.mongodb.com/>Mᴏɴɢᴏ DB</a>
-├◈ Bot Vᴇʀꜱɪᴏɴ: <a href=https://github.com/Jisshubot/Jisshu-forward-bot>V-2.4.1
-├◈ Bᴏᴛ Sᴏᴜʀᴄᴇ: <a href=https://github.com/Jisshubot/Jisshu-forward-bot>My Repo</a>
+├◈ Bot Vᴇʀꜱɪᴏɴ: V-2.4.1
 ╰───────────────⍟</b>"""
   
   STATUS_TXT = """<b><u>Bot Status</u>
