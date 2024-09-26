@@ -39,7 +39,7 @@ async def start(client, message):
             # Send a message asking the user to join the channel
             join_button = [
                 [InlineKeyboardButton("Join Channel", url=f"{Config.FORCE_SUB_CHANNEL}")],
-                [InlineKeyboardButton("↻ Tʀʏ Aɢᴀɪɴ", url=f"https://t.me/{client.username}?start=start")]
+                [InlineKeyboardButton("↻ Tʀʏ Aɢᴀɪɴ", url=f"https://t.me/{temp.UNAME}?start=start")]
             ]
             await client.send_message(
                 chat_id=message.chat.id,
