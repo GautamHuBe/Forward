@@ -9,6 +9,8 @@ from translation import Translation
 from datetime import datetime
 from pyrogram import Client, filters, enums, __version__ as pyrogram_version
 from pyrogram.types import *
+from plugins.utils import handle_force_sub, srm
+
 TIMEZONE = "Asia/Kolkata"
 
 main_buttons = [[
@@ -25,29 +27,10 @@ main_buttons = [[
 @Client.on_message(filters.private & filters.command(['start']))
 async def start(client, message):
     user = message.from_user
-    if Config.FORCE_SUB_ON:
-        # Check if the user has joined the force subscription channel
-        try:
-            member = await client.get_chat_member(Config.FORCE_SUB_CHANNEL, user.id)
-            if member.status == "kicked":
-                await client.send_message(
-                    chat_id=message.chat.id,
-                    text="You are banned from using this bot.",
-                )
-                return
-        except:
-            # Send a message asking the user to join the channel
-            join_button = [
-                [InlineKeyboardButton("Join Channel", url=f"{Config.FORCE_SUB_CHANNEL}")],
-                [InlineKeyboardButton("↻ Tʀʏ Aɢᴀɪɴ", url=f"https://t.me/{temp.UNAME}?start=start")]
-            ]
-            await client.send_message(
-                chat_id=message.chat.id,
-                text="Please join our channel to use this bot.",
-                reply_markup=InlineKeyboardMarkup(join_button)
-            )
-            return
-
+    text, buttons = await handle_force_sub(c, m)
+    if buttons:
+       return await srm(client, message, text, delete=0, photo='https://envs.sh/s/0jAf2Ta5kVg5AdnqZj-vIQ/Snp.png', markup=buttons)
+            
     if not await db.is_user_exist(user.id):
         await db.add_user(user.id, message.from_user.mention)
         # Log the new user to the log channel
