@@ -6,7 +6,7 @@ from pyrogram.raw.all import layer
 from pyrogram.enums import ParseMode
 from pyrogram.errors import FloodWait
 from plugins import logger
-from pyromod.helpers import ask
+from pyromod import ask
 
 class Bot(Client): 
     def __init__(self):
