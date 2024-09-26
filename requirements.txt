@@ -1,4 +1,4 @@
-pyrogram 
+Pyrogram 
 motor
 TgCrypto
 Dnspython
