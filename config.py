@@ -1,4 +1,4 @@
-# bot developer @mr_jisshu
+
 from os import environ 
 
 class Config:

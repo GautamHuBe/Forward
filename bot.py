@@ -55,4 +55,4 @@ class Bot(Client):
         msg = f"@{temp.UNAME} stopped. Bye."
         await super().stop()
         logging.info(msg)
-   # bot developer @mr_jisshu
+   
