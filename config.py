@@ -15,7 +15,7 @@ class Config:
     DATABASE_NAME = environ.get("DATABASE_NAME", "Forward")
 
     LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '-1002096968650'))
-    FSUB_CHANNELS = environ.get('FSUB_CHANNEL', [-1002097024150, -1001855163885])
+    FSUB_CHANNELS = environ.get('FSUB_CHANNEL', [-1002097024150])
 
 
 class temp(object): 
