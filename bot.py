@@ -1,12 +1,16 @@
 import asyncio
 from database import db 
 from config import Config, temp
-from pyrogram import Client, __version__
+from pyrogram import Client, __version__ , utils as pyroutils
 from pyrogram.raw.all import layer 
 from pyrogram.enums import ParseMode
 from pyrogram.errors import FloodWait
 from plugins import logger
 import pyromod
+
+
+pyroutils.MIN_CHAT_ID = -999999999999
+pyroutils.MIN_CHANNEL_ID = -100999999999999
 
 class Bot(Client): 
     def __init__(self):
