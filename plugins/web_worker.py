@@ -1,10 +1,11 @@
+import os
 from flask import Flask, render_template_string
 import threading
 
 # Initialize Flask app
 app = Flask(__name__)
 
-# HTML template (moved here to keep it separate from bot logic)
+# HTML template with inline CSS for a beautiful theme
 html_template = '''
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +59,8 @@ def welcome():
 
 # Function to run the Flask app in a separate thread
 def run_web():
-    app.run(host='0.0.0.0', port=8080)
+    port = int(os.environ.get("PORT", 8080))  # Get the port from the environment or use 8080 by default
+    app.run(host='0.0.0.0', port=port)
 
 # Start the Flask web server in a new thread
 def start_worker():
