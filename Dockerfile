@@ -1,12 +1,16 @@
-FROM python:3.8-slim-buster
+FROM python:3.12.3
 
-RUN apt update && apt upgrade -y
-RUN apt install git -y
-COPY requirements.txt /requirements.txt
+WORKDIR /app
 
-RUN cd /
-RUN pip3 install -U pip && pip3 install -U -r requirements.txt
-RUN mkdir /forward 
-WORKDIR /forward 
-COPY start.sh /start.sh
-CMD ["/bin/bash", "/start.sh"] 
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 8080
+
+COPY . .
+
+CMD ["bash", "start.sh"]
+ 
+ 
+ 
