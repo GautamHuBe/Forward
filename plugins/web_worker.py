@@ -59,7 +59,7 @@ def welcome():
 
 # Function to run the Flask app in a separate thread
 def run_web():
-    port = int(os.environ.get("PORT", 8080))  # Get the port from the environment or use 8080 by default
+    port = int(os.environ.get("PORT", 8078))  # Get the port from the environment or use 8080 by default
     app.run(host='0.0.0.0', port=port)
 
 # Start the Flask web server in a new thread
